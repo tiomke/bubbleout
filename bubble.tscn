@@ -8,6 +8,7 @@
 script = ExtResource("1_slgsi")
 color = Color(1, 1, 1, 1)
 radius = 16
+speed = 50
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_mask = 2

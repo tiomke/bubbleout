@@ -1,29 +1,32 @@
 extends Node2D
 
+# 配置项
 @export var color:Color
-var _color:Color
 @export var radius:int
+@export var speed:int
+
+var _color:Color
+
+# 引用项
 @onready var collision_shape_2d:CollisionShape2D = $Area2D/CollisionShape2D
 
+# 手势相关标记
 var is_mouse_in_shape:=false
-var is_triggered = false
+var is_triggered := false
 
-# 布朗运动参数
-@export var speed = 1.0 # 移动速度
-@export var diffusion_coefficient = 10.0 # 扩散系数，影响随机移动幅度
-@export var time_step = 0.3 # 每次更新的时间间隔（伪随机步长）
-var random
-var velocity = Vector2.ZERO
+# 随机移动
+var random:RandomNumberGenerator
 var safe_dist = Vector2.ZERO
+var wave_noise := FastNoiseLite.new()
 
-func _init():
-	prints("_init",_color.r,_color.g,_color.b,get_path())
-	prints("_init color",color.r,color.g,color.b,get_path())
-	
 # 导出的变量，也要在 ready 后才生效
 func _ready():
+	# 独立的随机数生成器
 	random = RandomNumberGenerator.new()
 	random.randomize()
+	init_wave_move(position)
+	
+	
 	prints("_ready rand",random.randf())
 	var shape = CircleShape2D.new()
 	shape.radius = radius
@@ -78,22 +81,26 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			join_chain()
 			
-var time_gap = 0
 func _process(delta):
-	time_gap += delta
-	if time_gap > time_step:
-		move_brownian()
-		time_gap = 0
-	var new_pos = position + velocity
-	position = new_pos.clamp(safe_dist, get_viewport_rect().size-safe_dist)
+	position = step_wave_move(delta)
+	#position = new_pos.clamp(safe_dist, get_viewport_rect().size-safe_dist)
+
+#region random wave move
+var _wave_init_pos:Vector2
+var _wave_pos:=Vector2.ZERO
+var _wave_x_scale=0.5 #值越大，采样间距越大
+var _wave_y_scale=200 #值越大，浮动范围越大
+
+func init_wave_move(init_pos): # x,y 为泡泡的初始位置
+	wave_noise.seed = random.randi()
+	wave_noise.noise_type = FastNoiseLite.TYPE_PERLIN
+	wave_noise.fractal_octaves = 1
+	wave_noise.frequency = 1.0 / 100.0 # 后面的20 是晶格的间距，值越大，晶格间距越大
+	_wave_init_pos = init_pos
 	
-func move_brownian():
-	# 计算随机偏移量
-	
-	var displacement = diffusion_coefficient * random.randf()
-	var angle = random.randf()*2*PI
-	var step_vector = Vector2(displacement * cos(angle), displacement * sin(angle))
-	# 更新位置并限制在屏幕内
-	velocity = step_vector
-	
+func step_wave_move(delta):
+	_wave_pos.x += speed*delta
+	_wave_pos.y = wave_noise.get_noise_1d(_wave_x_scale*_wave_pos.x)*_wave_y_scale
+	return _wave_init_pos + _wave_pos
+#endregion 
 
