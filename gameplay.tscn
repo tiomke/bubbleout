@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://762jlbipd4yx"]
+
+[ext_resource type="Script" path="res://gameplay.gd" id="1_scbns"]
+[ext_resource type="PackedScene" uid="uid://wdc7bc23k150" path="res://bubble.tscn" id="2_hvion"]
+
+[node name="Gameplay" type="Node2D"]
+script = ExtResource("1_scbns")
+
+[node name="Bubble" parent="." instance=ExtResource("2_hvion")]
+position = Vector2(110, 61)
+color = Color(1, 0.384314, 1, 1)
+
+[node name="Bubble2" parent="." instance=ExtResource("2_hvion")]
+position = Vector2(255, 74)
+radius = 32
+
+[node name="Bubble3" parent="." instance=ExtResource("2_hvion")]
+position = Vector2(135, 205)
+radius = 90
+
+[node name="Bubble4" parent="." instance=ExtResource("2_hvion")]
+position = Vector2(381, 217)
+radius = 48
