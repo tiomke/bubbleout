@@ -40,56 +40,70 @@ func _ready():
 	reset_state()
 	safe_dist = Vector2(_radius,_radius)
 	
+func reset_state():
+	_radius = size*16
+	collision_shape_2d.shape.radius = _radius
+	_color = get_color()
+	queue_redraw()
+
+func _draw():
+	draw_circle(Vector2.ZERO, _radius, _color)
+func get_color():
+	if bubble_type == BubbleType.Positive:
+		return positive_color
+	elif bubble_type == BubbleType.Negtive:
+		return negtive_color
+
+func _process(delta):
+	# 在泡泡链中，不移动
+	if is_in_drag_mode():
+		return
+	position = step_wave_move(delta)
+	#position = new_pos.clamp(safe_dist, get_viewport_rect().size-safe_dist)
+
+#region life-cycle
 func _enter_tree():
 	BubbleCtrl.add_bubble(self)
 	#prints(get_path(),"_enter_tree")
 func _exit_tree():
 	BubbleCtrl.remove_bubble(self)
 	#prints(get_path(),"_exit_tree")
-	
-func _draw():
-	draw_circle(Vector2.ZERO, _radius, _color)
+#endregion
 
-func clear_chain_info():
-	is_triggered = false
-	reset_state()
-	
-func join_chain():
-	is_triggered = true
-	_color = chain_color
-	queue_redraw()
-	BubbleCtrl.add_chain_bubble(self)
-	
-func reset_state():
-	_radius = size*16
-	collision_shape_2d.shape.radius = _radius
-	_color = get_color()
-	queue_redraw()
-	
-func get_color():
-	if bubble_type == BubbleType.Positive:
-		return positive_color
-	elif bubble_type == BubbleType.Negtive:
-		return negtive_color
-	
+#region input
 func _on_area_2d_mouse_entered():
 	is_mouse_in_shape = true
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		if not is_triggered and bubble_type == BubbleType.Positive:
-			join_chain()
+		enter_drag_mode()
 func _on_area_2d_mouse_exited():
 	is_mouse_in_shape = false
 func _on_area_2d_input_event(viewport, event, shape_idx):
-	if is_mouse_in_shape and not is_triggered and bubble_type == BubbleType.Positive:
+	if is_mouse_in_shape:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-			join_chain()
-			
-func _process(delta):
-	# 在拖动范围内的想法，被固定住
+			enter_drag_mode()
+#endregion
+
+#region drag handle
+func enter_drag_mode():
 	if is_triggered:
 		return
-	position = step_wave_move(delta)
-	#position = new_pos.clamp(safe_dist, get_viewport_rect().size-safe_dist)
+	if bubble_type != BubbleType.Positive:
+		return
+	is_triggered = true
+	join_chain();
+func leave_drag_mode():
+	is_triggered = false
+func is_in_drag_mode():
+	return is_triggered
+#endregion
+
+func clear_chain_info():
+	leave_drag_mode()
+	reset_state()
+func join_chain():
+	_color = chain_color
+	queue_redraw()
+	BubbleCtrl.add_chain_bubble(self)
 
 #region random wave move
 var _wave_init_pos:Vector2
@@ -109,4 +123,10 @@ func step_wave_move(delta):
 	_wave_pos.y = wave_noise.get_noise_1d(_wave_x_scale*_wave_pos.x)*_wave_y_scale
 	return _wave_init_pos + _wave_pos
 #endregion 
+
+#region 
+#endregion
+
+#region
+#endregion
 
