@@ -34,6 +34,6 @@ func random_spawn():
 	if randf() < nag_rate:
 		bubble_script.bubble_type = Bubble.BubbleType.Negtive
 	bubble_script.size = randi_range(spawn_size_min,spawn_size_max)
-	bubble_script.speed *= randf_range(0.8, 1.2) # 随机调整速度
-	prints("random_spawn>>bubble_type",bubble_script.get_color(),bubble_script.bubble_type)
+	bubble_script.speed *= randf_range(0.8, 1.2)/bubble_script.size # 随机调整速度
+	#prints("random_spawn>>bubble_type",bubble_script.get_color(),bubble_script.bubble_type)
 	bubble_script.reset_state()

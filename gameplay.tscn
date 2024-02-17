@@ -11,6 +11,7 @@ script = ExtResource("1_scbns")
 wait_time = 0.2
 autostart = true
 script = ExtResource("2_aa5v1")
+spawn_rate = 0.2
 
 [node name="Bubble" parent="." instance=ExtResource("2_hvion")]
 position = Vector2(110, 61)

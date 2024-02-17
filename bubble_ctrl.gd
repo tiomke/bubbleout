@@ -16,6 +16,8 @@ func remove_bubble(bubble):
 
 func add_chain_bubble(bubble):
 	bubble_chain_list.append(bubble)
+func remove_chain_bubble(bubble):
+	bubble_chain_list.erase(bubble)
 
 func clean_chain_bubble():
 	for bubble in bubble_chain_list:

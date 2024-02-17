@@ -11,9 +11,11 @@ enum BubbleType { Positive,Negtive }
 @export var positive_color:Color
 @export var negtive_color:Color
 @export var chain_color:Color
+@export var max_size:=15
 
 var _color:Color
 var _radius:int
+var is_destroying:bool
 
 # 引用项
 @onready var collision_shape_2d:CollisionShape2D = $Area2D/CollisionShape2D
@@ -45,6 +47,11 @@ func reset_state():
 	collision_shape_2d.shape.radius = _radius
 	_color = get_color()
 	queue_redraw()
+
+func destory():
+	BubbleCtrl.remove_bubble(self)
+	BubbleCtrl.remove_chain_bubble(self)
+	queue_free()
 
 func _draw():
 	draw_circle(Vector2.ZERO, _radius, _color)
@@ -81,6 +88,21 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 	if is_mouse_in_shape:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			enter_drag_mode()
+
+func _on_area_2d_area_entered(area):
+	if bubble_type != BubbleType.Negtive: # 只有负面泡泡有合并
+		return
+	
+	if not get_viewport_rect().grow(-_radius).has_point(position):
+		return
+	
+	prints("area entered>>area",get_node("Area2D"),area)
+	var other = area.owner as Bubble
+	if other and not other.is_destroying:
+		if other.size <= size and other.size <= 3 and size < max_size: # 比自己小的负面或者正面想法会被吸收
+			scale_up(other.size)
+			other.boom()
+			prints("absorb bubble>>node",self,other)
 #endregion
 
 #region drag handle
@@ -124,7 +146,15 @@ func step_wave_move(delta):
 	return _wave_init_pos + _wave_pos
 #endregion 
 
-#region 
+#region scaling & destroy
+func scale_up(delta_size):
+	var tmp = size
+	size = min(max_size,size+delta_size)
+	speed = speed * tmp / size
+	reset_state()
+func boom():
+	is_destroying = true
+	destory()
 #endregion
 
 #region
