@@ -96,23 +96,30 @@ func _on_area_2d_area_entered(area):
 	if not get_viewport_rect().grow(-_radius).has_point(position):
 		return
 	
-	prints("area entered>>area",get_node("Area2D"),area)
+	#prints("area entered>>area",get_node("Area2D"),area)
 	var other = area.owner as Bubble
 	if other and not other.is_destroying:
 		if other.size <= size and other.size <= 3 and size < max_size: # 比自己小的负面或者正面想法会被吸收
 			scale_up(other.size)
 			other.boom()
-			prints("absorb bubble>>node",self,other)
+			#prints("absorb bubble>>node",self,other)
 #endregion
 
 #region drag handle
 func enter_drag_mode():
+	if BubbleCtrl.is_chain_done:
+		return
 	if is_triggered:
 		return
-	if bubble_type != BubbleType.Positive:
-		return
-	is_triggered = true
-	join_chain();
+	if bubble_type == BubbleType.Positive:
+		is_triggered = true
+		join_chain();
+	else:
+		if BubbleCtrl.chain_count >= 3: #至少x个泡泡才能消除
+			scale_down(BubbleCtrl.chain_count+BubbleCtrl.chain_max_size)
+		BubbleCtrl.clean_chain_bubble()
+		BubbleCtrl.is_chain_done = true # 提前结束了
+		
 func leave_drag_mode():
 	is_triggered = false
 func is_in_drag_mode():
@@ -152,7 +159,19 @@ func scale_up(delta_size):
 	size = min(max_size,size+delta_size)
 	speed = speed * tmp / size
 	reset_state()
+func scale_down(delta_size):
+	var tmp = size
+	size = max(0,size-delta_size)
+	if size <= 0:
+		disappear()
+	else:
+		speed = speed * tmp / size
+		reset_state()
+	
 func boom():
+	is_destroying = true
+	destory()
+func disappear():
 	is_destroying = true
 	destory()
 #endregion
