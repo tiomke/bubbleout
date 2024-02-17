@@ -7,4 +7,3 @@
 script = ExtResource("1_ysugo")
 
 [node name="Bubble" parent="." instance=ExtResource("2_trgck")]
-radius = 90

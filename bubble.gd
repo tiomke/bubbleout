@@ -1,11 +1,19 @@
 extends Node2D
 
+class_name Bubble
+
+enum BubbleType { Positive,Negtive }
 # 配置项
-@export var color:Color
-@export var radius:int
+#@export var color:Color
+@export var bubble_type:BubbleType
+@export var size:int # size*16就是半径
 @export var speed:int
+@export var positive_color:Color
+@export var negtive_color:Color
+@export var chain_color:Color
 
 var _color:Color
+var _radius:int
 
 # 引用项
 @onready var collision_shape_2d:CollisionShape2D = $Area2D/CollisionShape2D
@@ -26,27 +34,21 @@ func _ready():
 	random.randomize()
 	init_wave_move(position)
 	
-	
-	prints("_ready rand",random.randf())
+	#prints("_ready rand",random.randf())
 	var shape = CircleShape2D.new()
-	shape.radius = radius
 	collision_shape_2d.shape = shape
 	reset_state()
-	safe_dist = Vector2(radius,radius)
-	
-	prints("_ready color",color.r,color.g,color.b,get_path())
-	#print("_ready>>",radius,";",shape.radius,";",get_path(),shape)
+	safe_dist = Vector2(_radius,_radius)
 	
 func _enter_tree():
 	BubbleCtrl.add_bubble(self)
-	prints(get_path(),"_enter_tree")
+	#prints(get_path(),"_enter_tree")
 func _exit_tree():
 	BubbleCtrl.remove_bubble(self)
-	prints(get_path(),"_exit_tree")
+	#prints(get_path(),"_exit_tree")
 	
 func _draw():
-	prints("_draw",_color.r,_color.g,_color.b,get_path())
-	draw_circle(Vector2.ZERO, radius, _color)
+	draw_circle(Vector2.ZERO, _radius, _color)
 
 func clear_chain_info():
 	is_triggered = false
@@ -54,34 +56,38 @@ func clear_chain_info():
 	
 func join_chain():
 	is_triggered = true
-	_color = Color(0,1,0)
+	_color = chain_color
 	queue_redraw()
 	BubbleCtrl.add_chain_bubble(self)
 	
 func reset_state():
-	_color = color
+	_radius = size*16
+	collision_shape_2d.shape.radius = _radius
+	_color = get_color()
 	queue_redraw()
 	
+func get_color():
+	if bubble_type == BubbleType.Positive:
+		return positive_color
+	elif bubble_type == BubbleType.Negtive:
+		return negtive_color
+	
 func _on_area_2d_mouse_entered():
-	var shape:CircleShape2D = collision_shape_2d.shape
-	shape.radius = radius
-	#prints("change radius",get_path(),radius)
 	is_mouse_in_shape = true
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and not is_triggered:
-		join_chain()
-		#print("_on_area_2d_mouse_entered")
-
-
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		if not is_triggered and bubble_type == BubbleType.Positive:
+			join_chain()
 func _on_area_2d_mouse_exited():
 	is_mouse_in_shape = false
-
-
 func _on_area_2d_input_event(viewport, event, shape_idx):
-	if is_mouse_in_shape and not is_triggered:
+	if is_mouse_in_shape and not is_triggered and bubble_type == BubbleType.Positive:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			join_chain()
 			
 func _process(delta):
+	# 在拖动范围内的想法，被固定住
+	if is_triggered:
+		return
 	position = step_wave_move(delta)
 	#position = new_pos.clamp(safe_dist, get_viewport_rect().size-safe_dist)
 

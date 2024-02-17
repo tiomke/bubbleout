@@ -1,23 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://762jlbipd4yx"]
+[gd_scene load_steps=4 format=3 uid="uid://762jlbipd4yx"]
 
 [ext_resource type="Script" path="res://gameplay.gd" id="1_scbns"]
+[ext_resource type="Script" path="res://bubble_spawner.gd" id="2_aa5v1"]
 [ext_resource type="PackedScene" uid="uid://wdc7bc23k150" path="res://bubble.tscn" id="2_hvion"]
 
 [node name="Gameplay" type="Node2D"]
 script = ExtResource("1_scbns")
 
+[node name="BubbleSpawner" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+script = ExtResource("2_aa5v1")
+
 [node name="Bubble" parent="." instance=ExtResource("2_hvion")]
 position = Vector2(110, 61)
-color = Color(1, 0.384314, 1, 1)
 
 [node name="Bubble2" parent="." instance=ExtResource("2_hvion")]
 position = Vector2(255, 74)
-radius = 32
 
 [node name="Bubble3" parent="." instance=ExtResource("2_hvion")]
 position = Vector2(135, 205)
-radius = 90
 
 [node name="Bubble4" parent="." instance=ExtResource("2_hvion")]
 position = Vector2(381, 217)
-radius = 48
+
+[connection signal="timeout" from="BubbleSpawner" to="BubbleSpawner" method="_on_timeout"]
