@@ -16,8 +16,6 @@ enum BubbleType { Positive,Negtive }
 var _color:Color
 var _radius:int
 var is_destroying:bool
-#var is_boom:bool
-#var is_disappear:bool
 
 # 引用项
 @onready var collision_shape_2d:CollisionShape2D = $Area2D/CollisionShape2D
@@ -36,16 +34,11 @@ var wave_noise := FastNoiseLite.new()
 var Score
 # 导出的变量，也要在 ready 后才生效
 func _ready():
-	
-	#Score = get_node("/root/Main/Gameplay/Score")
-	#prints("bubble _ready",Score)
 	# 独立的随机数生成器
 	random = RandomNumberGenerator.new()
 	random.randomize()
 	init_wave_move(position)
 	
-	
-	#prints("_ready rand",random.randf())
 	var shape = CircleShape2D.new()
 	collision_shape_2d.shape = shape
 	reset_state()
@@ -59,8 +52,6 @@ func reset_state():
 	queue_redraw()
 	crnt_sprite.scale.x = size
 	crnt_sprite.scale.y = size
-	#is_boom = false
-	#is_disappear = false
 	animation_tree["parameters/conditions/is_boom"]=false
 	animation_tree["parameters/conditions/is_disappear"]=false
 	
@@ -202,33 +193,19 @@ func scale_down(delta_size):
 	
 func boom():
 	is_destroying = true
-	#is_boom = true
-	#is_disappear = false
 	animation_tree["parameters/conditions/is_boom"]=true
 	animation_tree["parameters/conditions/is_disappear"]=false
 	#destory()
 func disappear():
 	is_destroying = true
-	#is_boom = false
-	#is_disappear = true
 	animation_tree["parameters/conditions/is_boom"]=false
 	animation_tree["parameters/conditions/is_disappear"]=true
 	#prints("disappear>>tree",animation_tree["parameters/conditions/is_disappear"])
 	#destory()
+func _on_animation_tree_animation_finished(anim_name):
+	destory() # 利用了bubble动画树的特点，只要有结束回调，就一定是消失的动画
+	pass
 #endregion
 
 #region
 #endregion
-
-
-
-func _on_animation_tree_animation_started(anim_name):
-	#prints("animation start",anim_name)
-	pass # Replace with function body.
-
-
-func _on_animation_tree_animation_finished(anim_name):
-	destory() # 利用了bubble动画树的特点，只要有结束回调，就一定是消失的动画
-	#var player = $Area2D/AnimationPlayer as AnimationPlayer
-	#prints("_on_animation_tree_animation_finished",anim_name,player.current_animation,player.animation_get_next(anim_name))
-	pass # Replace with function body.
