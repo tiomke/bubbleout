@@ -41,6 +41,7 @@ var wave_noise := FastNoiseLite.new()
 var Score
 # 导出的变量，也要在 ready 后才生效
 func _ready():
+	
 	# 独立的随机数生成器
 	random = RandomNumberGenerator.new()
 	random.randomize()
@@ -61,7 +62,7 @@ func reset_state():
 	crnt_sprite.scale.y = size
 	animation_tree["parameters/conditions/is_boom"]=false
 	animation_tree["parameters/conditions/is_disappear"]=false
-	
+	prints("get_viewport_rect(),radius,frame",get_viewport_rect(),_radius,get_viewport_rect().grow(-_radius))
 
 func destroy():
 	BubbleCtrl.remove_bubble(self)
@@ -81,6 +82,8 @@ func _process(delta):
 	if not visible:
 		return
 	if not gameplay.is_ready:
+		return
+	if is_destroying:
 		return
 	if position.x>get_viewport_rect().size.x+_radius:
 		#prints("disappear>>",position,_radius,get_viewport_rect())
@@ -128,7 +131,7 @@ func _on_area_2d_area_entered(area):
 	if other and not other.is_destroying:
 		if other.size <= size and other.size <= 3 and size < max_size: # 比自己小的负面或者正面想法会被吸收
 			scale_up(other.size)
-			other.boom()
+			other.disappear()
 			#prints("absorb bubble>>node",self,other)
 #endregion
 

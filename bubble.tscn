@@ -341,7 +341,7 @@ shape = SubResource("CircleShape2D_wd14d")
 [node name="Sprite" type="Sprite2D" parent="Area2D"]
 texture = ExtResource("2_cbe6b")
 hframes = 4
-frame = 2
+frame = 3
 region_enabled = true
 region_rect = Rect2(0, 0, 128, 32)
 
