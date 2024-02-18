@@ -1,4 +1,5 @@
 extends Sprite2D
+@onready var sfx_full_energy = $full_energy
 
 
 func combo_frame(count):
@@ -9,4 +10,6 @@ func combo_frame(count):
 	elif count == 2:
 		frame = 2
 	elif count >= 3:
+		if count == 3:
+			sfx_full_energy.play()
 		frame = 1

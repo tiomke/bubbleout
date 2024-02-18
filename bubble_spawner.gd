@@ -17,9 +17,28 @@ func _on_timeout():
 	acc_count += 1
 	random_spawn()
 	
+func gameover():
+	reset()
+	stop()
+
 func reset():
 	acc_count = 0
-	
+
+func init_spawn():
+	prints("init_spawn()")
+	for i in 8:
+		var new_bubble = bubble_scene.instantiate() as Bubble
+		var bubble = gameplay.get_node("Bubble"+str(i+1)) as Bubble
+		prints("init_spawn",bubble)
+		bubble.get_node("Area2D").monitoring = false
+		bubble.get_node("Area2D").monitorable = false
+		new_bubble.bubble_type = bubble.bubble_type
+		new_bubble.position = bubble.position
+		new_bubble.size = bubble.size
+		new_bubble.speed = bubble.speed
+		new_bubble.visible = true
+		gameplay.add_child(new_bubble)
+		
 func random_spawn():
 	if randf() > spawn_rate:
 		return

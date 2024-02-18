@@ -22,6 +22,13 @@ var is_destroying:bool
 @onready var crnt_sprite = $Area2D/Sprite
 @onready var gameplay = $".."
 @onready var animation_tree = $Area2D/AnimationTree
+@onready var sfx_boom = $Sounds/boom
+@onready var sfx_disappear_b = $Sounds/disappear_b
+@onready var sfx_disappear_y = $Sounds/disappear_y
+@onready var sfx_join_chain = $Sounds/join_chain
+@onready var sfx_scale_down = $Sounds/scale_down
+@onready var sfx_scale_up = $Sounds/scale_up
+@onready var sfx_chain_fail = $Sounds/chain_fail
 
 # 手势相关标记
 var is_mouse_in_shape:=false
@@ -56,7 +63,7 @@ func reset_state():
 	animation_tree["parameters/conditions/is_disappear"]=false
 	
 
-func destory():
+func destroy():
 	BubbleCtrl.remove_bubble(self)
 	BubbleCtrl.remove_chain_bubble(self)
 	queue_free()
@@ -71,11 +78,13 @@ func get_color():
 		return negtive_color
 
 func _process(delta):
+	if not visible:
+		return
 	if not gameplay.is_ready:
 		return
 	if position.x>get_viewport_rect().size.x+_radius:
 		#prints("disappear>>",position,_radius,get_viewport_rect())
-		disappear()
+		destroy()
 	# 在泡泡链中，不移动
 	if is_in_drag_mode():
 		return
@@ -84,9 +93,13 @@ func _process(delta):
 
 #region life-cycle
 func _enter_tree():
+	if not visible:
+		return
 	BubbleCtrl.add_bubble(self)
 	#prints(get_path(),"_enter_tree")
 func _exit_tree():
+	if not visible:
+		return
 	BubbleCtrl.remove_bubble(self)
 	#prints(get_path(),"_exit_tree")
 #endregion
@@ -145,10 +158,13 @@ func is_in_drag_mode():
 func clear_chain_info():
 	leave_drag_mode()
 	reset_state()
+	if BubbleCtrl.is_chain_done:
+		sfx_chain_fail.play()
 func join_chain():
 	_color = chain_color
 	queue_redraw()
 	BubbleCtrl.add_chain_bubble(self)
+	sfx_join_chain.play()
 
 #region random wave move
 var _wave_init_pos:Vector2
@@ -176,6 +192,7 @@ func scale_up(delta_size):
 	speed = speed * tmp / size
 	reset_state()
 	get_tree().call_group("score","sub_score")
+	sfx_scale_up.play()
 	if size >= max_size:
 		boom()
 		get_tree().call_group("score","sub_hp")
@@ -183,6 +200,7 @@ func scale_up(delta_size):
 func scale_down(delta_size):
 	var tmp = size
 	size = max(0,size-delta_size)
+	sfx_scale_down.play()
 	if size <= 0:
 		disappear()
 		get_tree().call_group("score","add_score",2)
@@ -195,15 +213,20 @@ func boom():
 	is_destroying = true
 	animation_tree["parameters/conditions/is_boom"]=true
 	animation_tree["parameters/conditions/is_disappear"]=false
-	#destory()
+	sfx_boom.play()
+	#destroy()
 func disappear():
 	is_destroying = true
 	animation_tree["parameters/conditions/is_boom"]=false
 	animation_tree["parameters/conditions/is_disappear"]=true
+	if bubble_type == BubbleType.Positive:
+		sfx_disappear_y.play()
+	else:
+		sfx_disappear_b.play()
 	#prints("disappear>>tree",animation_tree["parameters/conditions/is_disappear"])
-	#destory()
+	#destroy()
 func _on_animation_tree_animation_finished(anim_name):
-	destory() # 利用了bubble动画树的特点，只要有结束回调，就一定是消失的动画
+	destroy() # 利用了bubble动画树的特点，只要有结束回调，就一定是消失的动画
 	pass
 #endregion
 

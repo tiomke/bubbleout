@@ -1,8 +1,15 @@
-[gd_scene load_steps=12 format=3 uid="uid://wdc7bc23k150"]
+[gd_scene load_steps=19 format=3 uid="uid://wdc7bc23k150"]
 
 [ext_resource type="Script" path="res://bubble.gd" id="1_slgsi"]
 [ext_resource type="Texture2D" uid="uid://cwh5vaq1vvr8n" path="res://img/bubble.png" id="2_cbe6b"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://dsuvxv6mlwobh" path="res://bubble_ani_nsm.tres" id="3_away4"]
+[ext_resource type="AudioStream" uid="uid://ct1ukjmv6pasl" path="res://sound/boom.wav" id="4_d5pls"]
+[ext_resource type="AudioStream" uid="uid://lrd2hbevvoun" path="res://sound/disappear_b.wav" id="5_sugse"]
+[ext_resource type="AudioStream" uid="uid://b5b8muvpev75n" path="res://sound/disappear_y.wav" id="6_xfbqe"]
+[ext_resource type="AudioStream" uid="uid://ndroj2r8aew3" path="res://sound/join_chain.wav" id="7_g5riw"]
+[ext_resource type="AudioStream" uid="uid://81usp5vbrris" path="res://sound/scale_down.wav" id="8_6bfgu"]
+[ext_resource type="AudioStream" uid="uid://bu2x1jn66evj3" path="res://sound/scale_up.wav" id="9_tde6t"]
+[ext_resource type="AudioStream" uid="uid://cw6iggj6aa4mk" path="res://sound/chain_fail.wav" id="11_xkcbn"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wd14d"]
 
@@ -352,6 +359,29 @@ advance_expression_base_node = NodePath("../..")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/is_boom = false
 parameters/conditions/is_disappear = false
+
+[node name="Sounds" type="Node2D" parent="."]
+
+[node name="boom" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = ExtResource("4_d5pls")
+
+[node name="disappear_b" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = ExtResource("5_sugse")
+
+[node name="disappear_y" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = ExtResource("6_xfbqe")
+
+[node name="join_chain" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = ExtResource("7_g5riw")
+
+[node name="scale_down" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = ExtResource("8_6bfgu")
+
+[node name="scale_up" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = ExtResource("9_tde6t")
+
+[node name="chain_fail" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = ExtResource("11_xkcbn")
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

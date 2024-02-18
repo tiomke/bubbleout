@@ -15,44 +15,52 @@ spawn_size_max = 3
 negtive_max_minute = 5.0
 negtive_max_rate = 0.9
 
-[node name="Bubble" parent="." instance=ExtResource("2_hvion")]
+[node name="Bubble1" parent="." instance=ExtResource("2_hvion")]
+visible = false
 position = Vector2(55, 101)
 bubble_type = 1
 size = 1
 speed = 20
 
 [node name="Bubble2" parent="." instance=ExtResource("2_hvion")]
+visible = false
 position = Vector2(148, 101)
 size = 1
 speed = 20
 
 [node name="Bubble3" parent="." instance=ExtResource("2_hvion")]
+visible = false
 position = Vector2(147, 196)
 size = 1
 speed = 20
 
 [node name="Bubble4" parent="." instance=ExtResource("2_hvion")]
+visible = false
 position = Vector2(356, 105)
 size = 1
 speed = 20
 
 [node name="Bubble5" parent="." instance=ExtResource("2_hvion")]
+visible = false
 position = Vector2(249, 104)
 size = 1
 speed = 20
 
 [node name="Bubble6" parent="." instance=ExtResource("2_hvion")]
+visible = false
 position = Vector2(250, 287)
 size = 1
 speed = 20
 
 [node name="Bubble7" parent="." instance=ExtResource("2_hvion")]
+visible = false
 position = Vector2(62, 288)
 bubble_type = 1
 size = 1
 speed = 20
 
 [node name="Bubble8" parent="." instance=ExtResource("2_hvion")]
+visible = false
 position = Vector2(248, 199)
 size = 1
 speed = 20

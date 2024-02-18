@@ -38,4 +38,12 @@ func clean_chain_bubble():
 		bubble.clear_chain_info()
 		bubble.call_deferred("disappear")
 	bubble_chain_list.clear()
-	
+
+func reset():
+	chain_total_size = 0
+	chain_max_size = 0
+	chain_count = 0
+	clean_chain_bubble()
+	for bubble in bubble_list:
+		bubble.call_deferred("destroy")
+	bubble_list.clear()
