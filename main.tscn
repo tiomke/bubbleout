@@ -1,0 +1,148 @@
+[gd_scene load_steps=12 format=3 uid="uid://dhl131uasfhu1"]
+
+[ext_resource type="Texture2D" uid="uid://cnco0cuab6ojg" path="res://img/cover-page.png" id="1_1h5sl"]
+[ext_resource type="Texture2D" uid="uid://bioxww8y1qivc" path="res://img/background.png" id="1_37wua"]
+[ext_resource type="Script" path="res://main.gd" id="1_bdvm1"]
+[ext_resource type="PackedScene" uid="uid://762jlbipd4yx" path="res://gameplay.tscn" id="1_d8kqc"]
+[ext_resource type="Script" path="res://score.gd" id="1_viroq"]
+[ext_resource type="Texture2D" uid="uid://blrqffkqplwu1" path="res://img/clock-table2.png" id="5_6e15m"]
+[ext_resource type="Texture2D" uid="uid://dew2wa81glnq4" path="res://img/mood.png" id="5_sohim"]
+[ext_resource type="Texture2D" uid="uid://yk4hrixmt226" path="res://img/clock-cover.png" id="5_wbh56"]
+[ext_resource type="Texture2D" uid="uid://q52xfmnq0gev" path="res://img/health_bar.png" id="7_vknji"]
+[ext_resource type="Script" path="res://combo.gd" id="8_6f8sa"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_dqasu"]
+load_path = "res://.godot/imported/health_bar.png-2b46fe906df6047f05e20fcd41a33115.ctex"
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_bdvm1")
+metadata/_edit_vertical_guides_ = [80.0]
+
+[node name="CoverPage" type="Sprite2D" parent="."]
+z_index = 100
+texture = ExtResource("1_1h5sl")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Score" type="Node2D" parent="." groups=["score"]]
+script = ExtResource("1_viroq")
+
+[node name="Gameplay" parent="." instance=ExtResource("1_d8kqc")]
+visible = false
+
+[node name="Background2" type="Sprite2D" parent="Gameplay"]
+z_index = -1
+texture = ExtResource("1_37wua")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="HpBar" type="HBoxContainer" parent="Gameplay"]
+unique_name_in_owner = true
+offset_left = 122.0
+offset_top = 1.0
+offset_right = 310.0
+offset_bottom = 41.0
+theme_override_constants/separation = 5
+
+[node name="1" type="Sprite2D" parent="Gameplay/HpBar"]
+position = Vector2(24, 24)
+scale = Vector2(2, 2)
+texture = ExtResource("5_sohim")
+hframes = 3
+region_enabled = true
+region_rect = Rect2(2.08165e-12, 2.08165e-12, 48, 16)
+
+[node name="2" type="Sprite2D" parent="Gameplay/HpBar"]
+position = Vector2(60, 24)
+scale = Vector2(2, 2)
+texture = ExtResource("5_sohim")
+hframes = 3
+region_enabled = true
+region_rect = Rect2(2.08165e-12, 2.08165e-12, 48, 16)
+
+[node name="3" type="Sprite2D" parent="Gameplay/HpBar"]
+position = Vector2(96, 24)
+scale = Vector2(2, 2)
+texture = ExtResource("5_sohim")
+hframes = 3
+region_enabled = true
+region_rect = Rect2(2.08165e-12, 2.08165e-12, 48, 16)
+
+[node name="4" type="Sprite2D" parent="Gameplay/HpBar"]
+position = Vector2(132, 24)
+scale = Vector2(2, 2)
+texture = ExtResource("5_sohim")
+hframes = 3
+region_enabled = true
+region_rect = Rect2(2.08165e-12, 2.08165e-12, 48, 16)
+
+[node name="5" type="Sprite2D" parent="Gameplay/HpBar"]
+position = Vector2(167, 24)
+scale = Vector2(2, 2)
+texture = ExtResource("5_sohim")
+hframes = 3
+region_enabled = true
+region_rect = Rect2(2.08165e-12, 2.08165e-12, 48, 16)
+
+[node name="Clock" type="Node2D" parent="Gameplay"]
+z_index = 10
+position = Vector2(2, 0)
+scale = Vector2(1.5, 1.5)
+
+[node name="ClockTable" type="Sprite2D" parent="Gameplay/Clock"]
+unique_name_in_owner = true
+texture = ExtResource("5_6e15m")
+
+[node name="Clock-cover" type="Sprite2D" parent="Gameplay/Clock"]
+visible = false
+texture = ExtResource("5_wbh56")
+
+[node name="ComboBar" type="Node2D" parent="Gameplay"]
+z_index = 10
+position = Vector2(615, 310)
+scale = Vector2(2, 2)
+
+[node name="Combo" type="Sprite2D" parent="Gameplay/ComboBar" groups=["combo"]]
+texture = ExtResource("7_vknji")
+hframes = 4
+region_enabled = true
+region_rect = Rect2(0, 0, 64, 64)
+script = ExtResource("8_6f8sa")
+
+[node name="Sprite2D" type="Sprite2D" parent="Gameplay/ComboBar"]
+texture = SubResource("CompressedTexture2D_dqasu")
+hframes = 4
+region_enabled = true
+region_rect = Rect2(0, 0, 64, 64)
+
+[node name="Guide" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Statistic" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 80.0
+offset_bottom = 360.0
+mouse_filter = 2
+
+[node name="ChainCount2" type="Label" parent="Statistic"]
+visible = false
+layout_mode = 0
+offset_top = 78.0
+offset_right = 160.0
+offset_bottom = 101.0
+text = "11"
+horizontal_alignment = 1
+
+[node name="HugeNegtiveCount" type="Label" parent="Statistic"]
+visible = false
+layout_mode = 0
+offset_top = 35.0
+offset_right = 160.0
+offset_bottom = 58.0
+text = "11"
+horizontal_alignment = 1

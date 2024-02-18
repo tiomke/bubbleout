@@ -1,0 +1,62 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=14 format=3 uid="uid://dsuvxv6mlwobh"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_llu18"]
+animation = &"bubble_break_b"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dfx7r"]
+animation = &"bubble_disappear_b"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_63h1d"]
+animation = &"bubble_disappear_y"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_v7r21"]
+animation = &"bubble_idle_b"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_trs33"]
+animation = &"bubble_idle_y"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wbs14"]
+advance_mode = 2
+advance_expression = "bubble_type==BubbleType.Negtive"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_x0lwi"]
+advance_mode = 2
+advance_condition = &"is_disappear"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_il3y5"]
+advance_mode = 2
+advance_condition = &"is_boom"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xy7xt"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xyw47"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_djo06"]
+advance_mode = 2
+advance_expression = "bubble_type==BubbleType.Positive"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wovdf"]
+advance_mode = 2
+advance_condition = &"is_disappear"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7nf2i"]
+switch_mode = 2
+advance_mode = 2
+
+[resource]
+states/bubble_break_b/node = SubResource("AnimationNodeAnimation_llu18")
+states/bubble_break_b/position = Vector2(674.47, 55.775)
+states/bubble_disappear_b/node = SubResource("AnimationNodeAnimation_dfx7r")
+states/bubble_disappear_b/position = Vector2(675.97, -54.725)
+states/bubble_disappear_y/node = SubResource("AnimationNodeAnimation_63h1d")
+states/bubble_disappear_y/position = Vector2(657.775, 227.958)
+states/bubble_idle_b/node = SubResource("AnimationNodeAnimation_v7r21")
+states/bubble_idle_b/position = Vector2(404.66, -11.8975)
+states/bubble_idle_y/node = SubResource("AnimationNodeAnimation_trs33")
+states/bubble_idle_y/position = Vector2(397.775, 227.283)
+transitions = ["Start", "bubble_idle_b", SubResource("AnimationNodeStateMachineTransition_wbs14"), "bubble_idle_b", "bubble_disappear_b", SubResource("AnimationNodeStateMachineTransition_x0lwi"), "bubble_idle_b", "bubble_break_b", SubResource("AnimationNodeStateMachineTransition_il3y5"), "bubble_disappear_b", "End", SubResource("AnimationNodeStateMachineTransition_xy7xt"), "bubble_break_b", "End", SubResource("AnimationNodeStateMachineTransition_xyw47"), "Start", "bubble_idle_y", SubResource("AnimationNodeStateMachineTransition_djo06"), "bubble_idle_y", "bubble_disappear_y", SubResource("AnimationNodeStateMachineTransition_wovdf"), "bubble_disappear_y", "End", SubResource("AnimationNodeStateMachineTransition_7nf2i")]
+graph_offset = Vector2(173.13, -44.8495)

@@ -9,20 +9,61 @@ script = ExtResource("1_scbns")
 
 [node name="BubbleSpawner" type="Timer" parent="."]
 wait_time = 0.2
-autostart = true
 script = ExtResource("2_aa5v1")
-spawn_rate = 0.2
+spawn_size_min = 1
+spawn_size_max = 3
+negtive_max_minute = 5.0
+negtive_max_rate = 0.9
 
 [node name="Bubble" parent="." instance=ExtResource("2_hvion")]
-position = Vector2(110, 61)
+position = Vector2(55, 101)
+bubble_type = 1
+size = 1
+speed = 20
 
 [node name="Bubble2" parent="." instance=ExtResource("2_hvion")]
-position = Vector2(255, 74)
+position = Vector2(148, 101)
+size = 1
+speed = 20
 
 [node name="Bubble3" parent="." instance=ExtResource("2_hvion")]
-position = Vector2(135, 205)
+position = Vector2(147, 196)
+size = 1
+speed = 20
 
 [node name="Bubble4" parent="." instance=ExtResource("2_hvion")]
-position = Vector2(381, 217)
+position = Vector2(356, 105)
+size = 1
+speed = 20
+
+[node name="Bubble5" parent="." instance=ExtResource("2_hvion")]
+position = Vector2(249, 104)
+size = 1
+speed = 20
+
+[node name="Bubble6" parent="." instance=ExtResource("2_hvion")]
+position = Vector2(250, 287)
+size = 1
+speed = 20
+
+[node name="Bubble7" parent="." instance=ExtResource("2_hvion")]
+position = Vector2(62, 288)
+bubble_type = 1
+size = 1
+speed = 20
+
+[node name="Bubble8" parent="." instance=ExtResource("2_hvion")]
+position = Vector2(248, 199)
+size = 1
+speed = 20
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Timer2" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
 
 [connection signal="timeout" from="BubbleSpawner" to="BubbleSpawner" method="_on_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Timer2" to="." method="_on_timer_2_timeout"]

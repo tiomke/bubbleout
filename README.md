@@ -1,5 +1,5 @@
-# Climbing Out
+# Bubble Out
 
-Escaping Negative Thinking and Scaling Heights of Positivity
+Escaping Negative Thinking
 
 
