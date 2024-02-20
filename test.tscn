@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://koctb3h1wwrd"]
+
+[ext_resource type="FontFile" uid="uid://dgm3t1gq1ah20" path="res://retro-pixel-arcade.ttf" id="1_u4flk"]
+
+[node name="Test" type="Node2D"]
+
+[node name="TextureRect" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(16.16, 9.08)
+
+[node name="Label" type="Label" parent="TextureRect"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_u4flk")
+theme_override_font_sizes/font_size = 4
+text = "- Negative bubbles will explode after merging into a really big one, and you will lose one emotional energy"

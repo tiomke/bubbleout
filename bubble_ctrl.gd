@@ -6,7 +6,9 @@ var chain_count:=0
 var chain_total_size:=0
 var chain_max_size:=0
 var is_chain_done :=false # 当前泡泡链是否已经结束了
-	
+
+var is_positive_now = false
+
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed == false:

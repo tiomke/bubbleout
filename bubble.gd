@@ -62,7 +62,7 @@ func reset_state():
 	crnt_sprite.scale.y = size
 	animation_tree["parameters/conditions/is_boom"]=false
 	animation_tree["parameters/conditions/is_disappear"]=false
-	prints("get_viewport_rect(),radius,frame",get_viewport_rect(),_radius,get_viewport_rect().grow(-_radius))
+	#prints("get_viewport_rect(),radius,frame",get_viewport_rect(),_radius,get_viewport_rect().grow(-_radius).grow_side(0,-100))
 
 func destroy():
 	BubbleCtrl.remove_bubble(self)
@@ -123,9 +123,8 @@ func _on_area_2d_area_entered(area):
 	if bubble_type != BubbleType.Negtive: # 只有负面泡泡有合并
 		return
 	
-	if not get_viewport_rect().grow(-_radius).has_point(position):
+	if not get_viewport_rect().grow(-_radius).grow_side(0,-100).has_point(position):
 		return
-	
 	#prints("area entered>>area",get_node("Area2D"),area)
 	var other = area.owner as Bubble
 	if other and not other.is_destroying:
@@ -148,7 +147,9 @@ func enter_drag_mode():
 		join_chain();
 	else:
 		if BubbleCtrl.chain_count >= 3: #至少x个泡泡才能消除
-			scale_down(BubbleCtrl.chain_count+BubbleCtrl.chain_max_size)
+			var delta = max(BubbleCtrl.chain_total_size-3,1)
+			#max(BubbleCtrl.chain_count,BubbleCtrl.chain_max_size)-3+1
+			scale_down(delta)
 		BubbleCtrl.clean_chain_bubble()
 		BubbleCtrl.is_chain_done = true # 提前结束了
 		
@@ -190,6 +191,7 @@ func step_wave_move(delta):
 
 #region scaling & destroy
 func scale_up(delta_size):
+	delta_size = 1 # 直接加1点，降低难度
 	var tmp = size
 	size = min(max_size,size+delta_size)
 	speed = speed * tmp / size

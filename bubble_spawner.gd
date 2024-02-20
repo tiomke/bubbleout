@@ -25,7 +25,7 @@ func reset():
 	acc_count = 0
 
 func init_spawn():
-	prints("init_spawn()")
+	#prints("init_spawn()")
 	for i in 8:
 		var new_bubble = bubble_scene.instantiate() as Bubble
 		var bubble = gameplay.get_node("Bubble"+str(i+1)) as Bubble
@@ -40,6 +40,7 @@ func init_spawn():
 		gameplay.add_child(new_bubble)
 		
 func random_spawn():
+	prints("random_spawn",acc_count)
 	if randf() > spawn_rate:
 		return
 	var new_bubble = bubble_scene.instantiate()
@@ -47,12 +48,12 @@ func random_spawn():
 	new_bubble.position.y = randi_range(0,gameplay.get_viewport_rect().size.y)
 	gameplay.add_child(new_bubble)
 	var total_count = negtive_max_minute*60/wait_time
-	var nag_rate:float = negtive_max_rate * max(0.2,minf(acc_count / total_count,1))
+	var nag_rate:float = negtive_max_rate * max(0.3,minf(acc_count / total_count,1))
 	var bubble_script = new_bubble as Bubble
 	# 设置基础配置，同时加上随机偏移
 	if randf() < nag_rate:
 		bubble_script.bubble_type = Bubble.BubbleType.Negtive
 	bubble_script.size = randi_range(spawn_size_min,spawn_size_max)
-	bubble_script.speed *= randf_range(0.8, 1.2)/bubble_script.size # 随机调整速度
-	#prints("random_spawn>>bubble_type",bubble_script.get_color(),bubble_script.bubble_type)
+	bubble_script.speed *= randf_range(0.8, 1.2)/sqrt(bubble_script.size) * (1+0.0025*max(0,(acc_count-total_count)/2)) # 随机调整速度
+	prints("random_spawn>>bubble_type",bubble_script.speed)
 	bubble_script.reset_state()

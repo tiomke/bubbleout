@@ -12,8 +12,6 @@ wait_time = 0.2
 script = ExtResource("2_aa5v1")
 spawn_size_min = 1
 spawn_size_max = 3
-negtive_max_minute = 5.0
-negtive_max_rate = 0.9
 
 [node name="Bubble1" parent="." instance=ExtResource("2_hvion")]
 visible = false
